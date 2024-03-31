@@ -1,0 +1,24 @@
+.toolboxcontainer{
+    width: 20%;
+    height: 80%;
+    border: 1px solid rgb(15, 14, 14);
+    border-radius: 10px;
+    padding: 10px;
+    
+}
+.Stroke{
+  font-family: 'Popins';
+
+}
+.colourbox{
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    margin-right: 1px;
+    border-radius: 4px;
+}
+.colourcontainer{
+  display: flex;
+  width: 120px;
+  
+}
