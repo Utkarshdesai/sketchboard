@@ -1,5 +1,5 @@
 .toolboxcontainer{
-  
+   
    display: flex ;
    flex-direction: column;
     width: 300px;
@@ -28,7 +28,7 @@
 }
 
 .brushcontainer
-{
+{ 
   height: 100px;
   width: 200px;
 }
