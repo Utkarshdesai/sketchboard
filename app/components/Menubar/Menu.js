@@ -13,7 +13,7 @@ const Menu = () => {
 
    const p = useSelector((state)=> state.menubar.itemactive)
    const p2 = useSelector((state)=> state.menubar.actionitem)
-
+   //console.log(p2)
 
    const CurrentItem = (itemname) =>{
     dispatch(activemenu(itemname))

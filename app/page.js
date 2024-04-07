@@ -11,11 +11,9 @@ export default function Home() {
   return (
    <Provider store={store}> 
    
-    <div className="heading"> 
-    <h2> Drawing Board </h2>
-    <Menu/>
-    </div>
-  
+    <div> 
+        <Menu/> 
+    </div>  
     <Toolbox></Toolbox>
     <CanvasBoard/>
   
