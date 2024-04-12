@@ -6,6 +6,7 @@ import { faPencil, faEraser, faRotateLeft, faRotateRight, faFileArrowDown } from
 import { useDispatch, useSelector } from 'react-redux'
 import { MENU_ITEMS } from '../../Contstant'
 import { activemenu, menuactionclick } from '../Redux/slice/Menuboxslice'
+import { socket } from '@/app/socket'
 
 const Menu = () => {
 
@@ -16,7 +17,7 @@ const Menu = () => {
    //console.log(p2)
 
    const CurrentItem = (itemname) =>{
-    dispatch(activemenu(itemname))
+     dispatch(activemenu(itemname))
      console.log(itemname)
    }
 

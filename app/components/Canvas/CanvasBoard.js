@@ -1,9 +1,10 @@
 "use client"
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import styles from './canvas.module.css'
+import style from './canvas.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { MENU_ITEMS } from '@/app/Contstant'
 import { menuactionclick  } from '../Redux/slice/Menuboxslice'
+import { socket } from '@/app/socket';
 
 
 
@@ -21,12 +22,11 @@ const CanvasBoard = () => {
   //console.log(actionitem)
   
   //UNDO REDO and DOWNLOAD feature
-
   useEffect(()=>{
     console.log('download feat')
     if(!canvasref.current == true) return
     const canvas = canvasref.current
-    const contex = canvas.getContext('2d')
+    const contex = canvas.getContext('2d',{ willReadFrequently: true })
     console.log(contex)
 
     console.log(actionitem)
@@ -80,44 +80,66 @@ const CanvasBoard = () => {
   useEffect(()=>{
     if(!canvasref.current) return 
     const canvas = canvasref.current
-    const contex = canvas.getContext('2d')
+    const contex = canvas.getContext('2d' ,{ willReadFrequently: true })
 
-    const changeconfig = (color ,size) => {
-      contex.lineWidth = size
-      contex.strokeStyle = color
+    const changeConfig = (color, size) => {
+      contex.strokeStyle = color ;
+      contex.lineWidth = size ;
+  }
+
+    const handleChangeConfig = (config) => {
+        console.log("config", config)
+        changeConfig(config.color, config.size)
     }
-   
-    changeconfig(color , size)
+    changeConfig(color, size)
+    socket.on('changeConfig', handleChangeConfig)
 
-  },[size , color])
+    return () => {
+        socket.off('changeConfig', handleChangeConfig)
+    }
+
+  },[color,size])
 
   //Draw and Erase feature
   useLayoutEffect(()=>{
     
     if(!canvasref.current) return 
     const canvas = canvasref.current
-    const contex = canvas.getContext('2d')
+    const contex = canvas.getContext('2d' ,{ willReadFrequently: true })
     
     canvas.width = window.innerWidth ;
-    canvas.height = window.innerHeight ;
+    canvas.height = window.innerHeight
+    console.log(canvas.width)
+    console.log(canvas.height)
     // TODO - set width and height as full screen 
-    
+
+    const beginPath = (x, y) => {
+       contex.beginPath()
+       contex.moveTo(x, y)
+    }
+
+     
+      const drawLine = (x,y) =>{
+        contex.lineTo(x,y)
+        contex.stroke()
+      }
+      
     
       const handlemousedown = (e) => {
       shoulddraw.current = true
       console.log('press')
-      contex.beginPath()
-      contex.moveTo(e.clientX , e.clientY)      
+      beginPath(e.clientX , e.clientY)
+      socket.emit('beginPath' ,{x:e.clientX , y: e.clientY})
+             
       
     } 
   
     const handlemousemove = (e) => {
       
        if(!shoulddraw.current == true) return
-           contex.lineTo(e.clientX ,e.clientY)
-           contex.stroke()
-           console.log('yes')
-               
+       drawLine(e.clientX , e.clientY)
+       socket.emit('drawLine' , {x:e.clientX , y: e.clientY} )
+                     
     }
 
     const handlemouseup = () =>{
@@ -134,16 +156,31 @@ const CanvasBoard = () => {
 
       //set histroypointer value
    }
-   
+
+      const handleBeginPath = (path) => {
+        beginPath(path.x, path.y)
+      }
+
+      const handleDrawLine = (path) => {
+          drawLine(path.x, path.y)
+      }
+        
 
     canvas.addEventListener('mousedown' ,handlemousedown)
     canvas.addEventListener('mousemove' ,handlemousemove)
     canvas.addEventListener('mouseup' ,handlemouseup)
 
+    socket.on('beginPath', handleBeginPath)
+    socket.on('drawLine', handleDrawLine)
+
+
     return ( ()=>{
       canvas.removeEventListener('mousedown' ,handlemousedown)
       canvas.removeEventListener('mousemove' ,handlemousemove)
       canvas.removeEventListener('mouseup' ,handlemouseup)
+
+      socket.off('beginPath', handleBeginPath)
+      socket.off('drawLine', handleDrawLine)
   
     })
 
@@ -151,11 +188,8 @@ const CanvasBoard = () => {
 
  
   
-  return (
-  
-    <canvas ref={canvasref}> </canvas>
-  
-  )
+  return (<canvas ref={canvasref} className={style.canvas}></canvas>
+)
 }
 
 export default CanvasBoard
