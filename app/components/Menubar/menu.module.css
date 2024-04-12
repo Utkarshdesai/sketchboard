@@ -28,12 +28,25 @@
 }
 .icon{
     color:#3d3d3d;
-    font-size: 1.5rem;
+    font-size: 20px;
 }
 
-/* @media screen and (max-width: 640px) {
+@media screen and (max-width: 640px) {
     .menucontainer {
-        width: 50%; 
+        width: 40%; /* Adjusted width for smaller screens */
+        padding: 6px;
+        height: max-content;
     }
-} */
+
+    .iconcontainer {
+        width: 40%; /* Adjusted width for smaller screens */
+    }
+    .icon
+    {
+        font-size: 10px;
+    }
+   
+}
+
+
 

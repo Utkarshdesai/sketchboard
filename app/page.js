@@ -9,6 +9,7 @@ import './globals.css'
 
 export default function Home() {
   return (
+    <div> 
    <Provider store={store}> 
    
     <div> 
@@ -19,5 +20,6 @@ export default function Home() {
   
  
    </Provider> 
+   </div>
   );
 }

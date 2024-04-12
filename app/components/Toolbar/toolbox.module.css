@@ -51,14 +51,16 @@
   margin-top: 0.5rem; 
 }
 
-/* @media screen and (max-width: 640px) {
+  @media screen and (max-width: 640px) {
   .toolboxcontainer {
       top: unset;
       bottom: 0;
-      width: 100%;
+      width: 40%;
       left: 0;
   }
-} */
+
+
+}  
 
 
 
